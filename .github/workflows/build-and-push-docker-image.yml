@@ -44,7 +44,8 @@ jobs:
 
     needs: [check]
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
+    if:  |
+      ${{ github.event_name == 'workflow_dispatch' || env.PKG_UPDATE == 'true' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
