@@ -7,6 +7,7 @@ on:
 
 env:
   IMAGE_NAME: hagb/docker-easyconnect
+  PKG_UPDATE: false
 
 jobs:
   check:
@@ -22,9 +23,9 @@ jobs:
         run: |
           wget http://download.sangfor.com.cn/download/product/sslvpn/pkg/pkg_version.xml -O pkg_version_remote.xml
           if diff pkg_version.xml pkg_version_remote.xml >/dev/null; then
-            echo "different=false" >> $GITHUB_OUTPUT
+            echo "PKG_UPDATE=false" >> $GITHUB_ENV
           else
-            echo "different=true" >> $GITHUB_OUTPUT
+            echo "PKG_UPDATE=true" >> $GITHUB_ENV
           fi
         shell: bash
 
@@ -37,13 +38,13 @@ jobs:
           git commit -m "Update pkg_version.xml"
           git push
           echo "::set-output name=status::updated"
-        if: steps.compare.outputs.different == 'true'
+        if: env.PKG_UPDATE == 'true'
 
   build:
 
     needs: [check]
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || needs.check.outputs.status == 'updated' || needs.check.outputs.different == 'true'
+    if: github.event_name == 'workflow_dispatch' || env.PKG_UPDATE == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
