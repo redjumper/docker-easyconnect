@@ -36,6 +36,7 @@ runs:
         password: ${{ inputs.registry_password }}
 
     - name: Build Docker image
+      shell: bash
       run: |
         to-tag() {
           tag="$( IFS=-; printf %s "$*"; )"
@@ -83,6 +84,7 @@ runs:
         docker image rm hagb/docker-easyconnect:build
 
     - name: Push Docker image
+      shell: bash
       run: |
         to-tag() {
           IFS=-
@@ -107,7 +109,7 @@ runs:
         esac
 
         token="$( curl -sH "Content-Type: application/json" \
-                    -X POST -d "{\"username\": \"${{ secrets.DOCKERHUB_USERNAME }}\", \"password\": \"${{ secrets.DOCKERHUB_TOKEN }}\"}" \
+                    -X POST -d "{\"username\": \"${{ inputs.registry_username }}\", \"password\": \"${{ inputs.registry_password }}\"}" \
                     https://hub.docker.com/v2/users/login/ |
                   jq -r .token )"
         delete_tag() {
