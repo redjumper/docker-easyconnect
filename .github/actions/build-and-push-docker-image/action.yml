@@ -2,11 +2,6 @@ name: Build and Push Docker Image
 
 runs:
   using: 'composite'
-  env:
-    EC_IMAGE_NAME: hagb/docker-easyconnect
-    ATRUST_IMAGE_NAME: hagb/docker-atrust
-    ARCHS: mips64le arm64 i386 amd64
-    ATRUST_ARCHS: mips64le arm64 amd64
   steps:
     - name: Checkout
       uses: actions/checkout@v2
