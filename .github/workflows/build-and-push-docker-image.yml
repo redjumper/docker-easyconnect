@@ -8,3 +8,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: ./.github/actions/build-and-push-docker-image
+      with:
+        registry_username: ${{secrets.DOCKERHUB_USERNAME}}
+        registry_password: ${{secrets.DOCKERHUB_TOKEN}}
